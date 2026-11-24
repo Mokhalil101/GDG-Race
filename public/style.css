@@ -1,0 +1,40 @@
+/* GDG RACE - shared neon design system (SRS 3). Used by host.html and play.html. */
+:root {
+  --navy: #080B1A; --panel: #111A35; --panel2: #18234a;
+  --blue: #4285F4; --red: #EA4335; --yellow: #FBBC04; --green: #34A853;
+  --cyan: #00E5FF; --purple: #A855F7; --white: #fff; --gray: #A7B0C0;
+  --font: 'Rajdhani', 'Segoe UI', system-ui, -apple-system, 'Noto Sans Arabic', Roboto, Arial, sans-serif;
+  --display: 'Orbitron', 'Rajdhani', 'Segoe UI', system-ui, sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--navy); color: var(--white); font-family: var(--font); overflow: hidden; }
+button { font-family: inherit; cursor: pointer; }
+.hidden { display: none !important; }
+
+/* brand */
+.brand { display: inline-flex; align-items: center; gap: 12px; font-family: var(--display); font-weight: 800; letter-spacing: .08em; }
+.brand .dots { display: inline-flex; gap: 5px; }
+.brand .dots i { width: 12px; height: 12px; border-radius: 50%; display: block; }
+.brand .dots i:nth-child(1) { background: var(--blue); } .brand .dots i:nth-child(2) { background: var(--red); }
+.brand .dots i:nth-child(3) { background: var(--yellow); } .brand .dots i:nth-child(4) { background: var(--green); }
+.brand img { height: 48px; width: auto; display: block; }
+.neon { text-shadow: 0 0 8px rgba(0,229,255,.8), 0 0 24px rgba(0,229,255,.45); }
+.btn {
+  border: 2px solid var(--cyan); background: rgba(0,229,255,.08); color: var(--white); border-radius: 14px;
+  padding: 10px 22px; font-size: 22px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
+  box-shadow: 0 0 14px rgba(0,229,255,.25); transition: transform .08s, background .15s, box-shadow .15s;
+}
+.btn:hover { background: rgba(0,229,255,.2); box-shadow: 0 0 24px rgba(0,229,255,.5); }
+.btn:active { transform: scale(.97); }
+.btn:disabled { opacity: .35; cursor: not-allowed; box-shadow: none; }
+.btn.go { border-color: var(--green); background: rgba(52,168,83,.18); box-shadow: 0 0 18px rgba(52,168,83,.4); }
+.btn.go:hover { background: rgba(52,168,83,.35); }
+.btn.danger { border-color: var(--red); background: rgba(234,67,53,.14); box-shadow: 0 0 14px rgba(234,67,53,.3); }
+.btn.warn { border-color: var(--yellow); background: rgba(251,188,4,.12); box-shadow: 0 0 14px rgba(251,188,4,.3); }
+.btn.small { padding: 6px 14px; font-size: 17px; border-radius: 10px; }
+input, select {
+  font-family: inherit; font-size: 22px; color: var(--white); background: var(--panel); border: 2px solid #2a3a73;
+  border-radius: 12px; padding: 12px 14px; outline: none; width: 100%;
+}
+input:focus, select:focus { border-color: var(--cyan); box-shadow: 0 0 14px rgba(0,229,255,.35); }
+.muted { color: var(--gray); }

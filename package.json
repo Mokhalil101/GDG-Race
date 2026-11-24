@@ -1,0 +1,20 @@
+{
+  "name": "gdg-race",
+  "version": "1.1.0",
+  "description": "GDG RACE: Code to Victory - real-time multiplayer QR-based racing game for GDG Assiut events",
+  "main": "server/index.js",
+  "private": true,
+  "license": "MIT",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "test": "node --test test/game.test.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "phaser": "^3.90.0",
+    "qrcode": "^1.5.4",
+    "socket.io": "^4.8.1"
+  }
+}
