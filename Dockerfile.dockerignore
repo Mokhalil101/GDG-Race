@@ -1,0 +1,9 @@
+# BuildKit picks this up for GDG-Race/Dockerfile (context = the parent "game" folder).
+**/node_modules
+**/.git
+**/.env
+**/*.log
+Code-Man/tests
+Code-Man/tools
+CodeBreaker/tests
+GDG-Race/test

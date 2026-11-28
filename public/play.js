@@ -5,16 +5,17 @@
   var $ = function (id) { return document.getElementById(id); };
   function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
   function show(id, on) { $(id).classList.toggle('hidden', !on); }
+  var BASE = location.pathname.replace(/\/race(\/.*)?$/, ''); // this page is <base>/race/play
 
   // ---------- brand ----------
   var brand = $('brand');
   brand.innerHTML = '<span class="dots"><i></i><i></i><i></i><i></i></span><span>GDG RACE</span>';
   var logo = new Image();
   logo.onload = function () { brand.innerHTML = ''; brand.appendChild(logo); };
-  logo.alt = 'GDG Assiut'; logo.src = '/assets/logo.png';
+  logo.alt = 'GDG Assiut'; logo.src = BASE + '/assets/logo.png';
 
   // ---------- state ----------
-  var socket = io({ transports: ['websocket', 'polling'] });
+  var socket = io({ path: BASE + '/socket.io', transports: ['websocket', 'polling'] });
   var params = new URLSearchParams(location.search);
   var urlCode = (params.get('room') || '').toUpperCase().replace(/[^A-Z]/g, '').slice(0, 4);
   var session = readSession();
@@ -63,10 +64,13 @@
     cars.forEach(function (c) {
       var b = el('button', 'carbtn' + (c.id === selectedCar ? ' sel' : '')); b.type = 'button';
       b.style.setProperty('--c', c.color); b.disabled = c.taken || (lastInfo && !lastInfo.joinable);
-      var sw = el('div', 'sw', c.id); b.appendChild(sw); b.appendChild(el('div', null, c.taken ? 'taken' : c.name));
+      b.setAttribute('aria-pressed', c.id === selectedCar ? 'true' : 'false'); b.setAttribute('aria-label', c.name + ' car' + (c.taken ? ', taken' : ''));
+      var sw = el('div', 'sw', c.id); b.appendChild(sw); b.appendChild(el('div', null, c.taken ? 'Taken' : c.name));
       b.addEventListener('click', function () { selectedCar = c.id; renderCars(); });
       box.appendChild(b);
     });
+    var pick = cars.filter(function (c) { return c.id === selectedCar; })[0] || cars[0];
+    if (pick) { $('hero-car').style.setProperty('--c', pick.color); $('hero-num').textContent = pick.id; }
     updateJoinButton();
   }
   function updateJoinButton() {
@@ -91,21 +95,14 @@
   });
 
   // ---------- play view ----------
-  function carSvg(color) {
-    return '<svg viewBox="0 0 80 140" xmlns="http://www.w3.org/2000/svg" style="--c:' + color + '">' +
-      '<rect x="6" y="16" width="14" height="30" rx="5" fill="#0a0f24"/><rect x="60" y="16" width="14" height="30" rx="5" fill="#0a0f24"/>' +
-      '<rect x="6" y="94" width="14" height="30" rx="5" fill="#0a0f24"/><rect x="60" y="94" width="14" height="30" rx="5" fill="#0a0f24"/>' +
-      '<rect x="14" y="6" width="52" height="128" rx="24" fill="' + color + '"/>' +
-      '<rect x="24" y="28" width="32" height="34" rx="10" fill="#0a0f24" opacity=".92"/>' +
-      '<rect x="28" y="84" width="24" height="26" rx="8" fill="#0a0f24" opacity=".55"/>' +
-      '<rect x="20" y="10" width="10" height="6" rx="3" fill="#fff"/><rect x="50" y="10" width="10" height="6" rx="3" fill="#fff"/>' +
-      '<rect x="20" y="124" width="10" height="5" rx="2" fill="#ff3030"/><rect x="50" y="124" width="10" height="5" rx="2" fill="#ff3030"/></svg>';
+  function carToy(color, n) {
+    return '<span class="toy" style="--c:' + color + '"><i class="wf t"></i><i class="wf b"></i><b class="body"><em>' + n + '</em></b></span>';
   }
 
   function enterPlay(player, info) {
     me = player; replaced = false;
     show('view-join', false); show('view-play', true);
-    $('car-art').innerHTML = carSvg(player.color); $('car-art').style.setProperty('--c', player.color);
+    $('car-art').innerHTML = carToy(player.color, Number(player.carId) || 1); $('car-art').style.setProperty('--c', player.color);
     $('me-name').textContent = player.name; $('me-name').dir = 'auto';
     $('me-car').textContent = 'Car #' + player.carId + ' · ' + player.carName;
     $('result').style.setProperty('--c', player.color);
@@ -145,13 +142,13 @@
     else if (status === STATUS.LOBBY) { s.textContent = "You're in! Waiting for the host to start…"; }
     else if (status === STATUS.COUNTDOWN) { s.textContent = 'Get ready!'; s.classList.add('warn'); cnt.classList.remove('hidden'); cnt.textContent = cdValue == null ? '' : cdValue; }
     else if (status === STATUS.RACING) {
-      s.textContent = 'GO! Hold LEFT / RIGHT'; s.classList.add('go');
+      s.textContent = 'GO GO GO! Hold LEFT / RIGHT'; s.classList.add('go');
       var r = myRow();
-      if (r) st.innerHTML = 'Lap <b>' + r.lap + '/' + laps + '</b> · Position <b>' + r.pos + '/' + board.rows.length + '</b>';
+      if (r) st.innerHTML = '<span class="st"><i>LAP</i><b>' + r.lap + '/' + laps + '</b></span><span class="st"><i>POSITION</i><b>' + r.pos + '/' + board.rows.length + '</b></span>';
     }
     else if (status === STATUS.PAUSED) { s.textContent = 'Race paused'; s.classList.add('warn'); }
     else if (status === STATUS.ABORTED) { s.textContent = 'Race aborted by the host'; s.classList.add('bad'); }
-    else if (status === STATUS.FINISHED) { s.textContent = 'Race finished'; renderResult(res); }
+    else if (status === STATUS.FINISHED) { s.textContent = 'Race finished!'; renderResult(res); }
     updatePads();
   }
 
@@ -159,13 +156,18 @@
     var mine = results && results.filter(function (r) { return r.playerId === me.id; })[0];
     if (!mine) return;
     box.classList.remove('hidden'); box.innerHTML = '';
-    var big = el('div'); var b = el('b', null, mine.resultStatus === 'DNF' ? 'DNF' : 'P' + mine.finishPosition);
+    var big = el('div', 'place'); var b = el('b', null, mine.resultStatus === 'DNF' ? 'DNF' : 'P' + mine.finishPosition);
+    if (mine.finishPosition === 1 && mine.resultStatus !== 'DNF') big.innerHTML = TROPHY;
     big.appendChild(b); box.appendChild(big);
-    box.appendChild(el('div', null, mine.resultStatus === 'DNF' ? 'Did not finish (' + mine.completedLaps + ' laps)' : fmtTime(mine.finishTime)));
+    box.appendChild(el('div', 'tm', mine.resultStatus === 'DNF' ? 'Did not finish (' + mine.completedLaps + ' laps)' : fmtTime(mine.finishTime)));
     var top = results.filter(function (r) { return r.resultStatus === 'Finished'; }).slice(0, 3);
-    top.forEach(function (r) { var line = el('div', 'muted', r.finishPosition + '. ' + r.name + '  ' + fmtTime(r.finishTime)); line.dir = 'auto'; box.appendChild(line); });
+    top.forEach(function (r) { var line = el('div', 'line', r.finishPosition + '. ' + r.name + '  ' + fmtTime(r.finishTime)); line.dir = 'auto'; box.appendChild(line); });
     if (navigator.vibrate) navigator.vibrate(mine.finishPosition === 1 ? [80, 60, 80, 60, 200] : 120);
   }
+
+  var TROPHY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10v5a5 5 0 0 1-10 0z" fill="#FBBC04" stroke="#1B1340" stroke-width="1.5" stroke-linejoin="round"/>' +
+    '<path d="M7 5H4a3 3 0 0 0 3 4.5M17 5h3a3 3 0 0 1-3 4.5" fill="none" stroke="#1B1340" stroke-width="1.5"/><path d="M10 13h4l1 4H9z" fill="#FBBC04" stroke="#1B1340" stroke-width="1.5" stroke-linejoin="round"/>' +
+    '<rect x="7.5" y="17" width="9" height="3.5" rx="1" fill="#EA4335" stroke="#1B1340" stroke-width="1.5"/></svg>';
 
   // ---------- steering (SRS 5.6, 7.3) ----------
   var pressL = false, pressR = false, dir = 0, repeat = null;

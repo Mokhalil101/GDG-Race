@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#5EC8FF">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Code Kart Battle - Controller</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=JetBrains+Mono:wght@600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="../play.css">
+<link rel="stylesheet" href="../kart-play.css">
+</head>
+<body>
+<main id="app">
+  <header class="bar">
+    <div class="brand" id="brand"></div>
+    <div id="conn" class="conn"><i></i><span>Connecting…</span></div>
+  </header>
+
+  <!-- Join: code, name, kart -->
+  <section id="view-join" class="view">
+    <h1 class="outlined tilt k-title">CODE KART</h1>
+    <div class="hero" aria-hidden="true">
+      <span id="hero-car" class="toy"><i class="wf t"></i><i class="wf b"></i><b class="body"><em id="hero-num">1</em></b></span>
+      <span class="qbox hero-box">?</span>
+    </div>
+    <div class="joincard">
+      <label class="f-code">Room
+        <input id="code" maxlength="4" autocapitalize="characters" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="ABCD">
+      </label>
+      <label class="f-name">Your name
+        <input id="name" maxlength="16" autocomplete="nickname" placeholder="Racing name">
+      </label>
+    </div>
+    <div class="lbl" id="pick-lbl">Pick your kart!</div>
+    <div id="cars" class="cars k-cars" role="group" aria-labelledby="pick-lbl"></div>
+    <div class="join-foot">
+      <p id="join-msg" class="msg" role="status"></p>
+      <button id="join" class="btn go big" disabled>JOIN BATTLE!</button>
+    </div>
+  </section>
+
+  <!-- Controller: who / item / steering -->
+  <section id="view-play" class="view hidden">
+    <div class="k-me">
+      <span id="me-sw" class="k-sw"></span>
+      <b id="me-name" class="k-name"></b>
+      <span id="me-pos" class="k-pos">Lap 1/3</span>
+    </div>
+    <div class="info k-info">
+      <div id="car-art" class="car-art"></div>
+      <div id="status" class="status">Waiting for host…</div>
+      <div id="count" class="count hidden">10</div>
+      <button id="item" class="k-itembtn" type="button" disabled>
+        <span id="item-icon" class="k-itemicon"></span>
+        <span class="k-itemtxt"><b id="item-name">No item yet</b><span id="item-hint">Drive over a ? box to win one</span></span>
+      </button>
+      <div id="streak" class="k-streak" aria-label="Right answers in a row"><span>Streak</span><i></i><i></i><i></i><span>= TURBO</span></div>
+      <div id="result" class="result hidden"></div>
+    </div>
+    <div id="pads" class="pads disabled">
+      <button id="btn-left" class="pad left" type="button" aria-label="Steer left"><svg class="arrow" viewBox="0 0 60 60" aria-hidden="true"><path d="M38 10 16 30l22 20" fill="none" stroke="#1B1340" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><path d="M38 10 16 30l22 20" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="t">LEFT</span></button>
+      <button id="btn-right" class="pad right" type="button" aria-label="Steer right"><svg class="arrow" viewBox="0 0 60 60" aria-hidden="true"><path d="M22 10l22 20-22 20" fill="none" stroke="#1B1340" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 10l22 20-22 20" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="t">RIGHT</span></button>
+    </div>
+  </section>
+
+  <!-- Item box question (design: KartPhone) -->
+  <section id="view-q" class="kq hidden" aria-live="assertive">
+    <div class="k-me">
+      <span id="q-sw" class="k-sw"></span>
+      <b id="q-name" class="k-name"></b>
+      <span id="q-pos" class="k-pos">Lap 1/3</span>
+    </div>
+    <div class="kq-head">
+      <span class="qbox kq-box" aria-hidden="true">?</span>
+      <h1 class="kq-title">ITEM<br>BOX!</h1>
+    </div>
+    <div class="kq-card">
+      <div class="kq-timer"><span class="kq-bar"><i id="q-bar"></i></span><b id="q-secs">5 s</b></div>
+      <p id="q-prompt" class="kq-prompt"></p>
+      <pre id="q-code" class="kq-code" dir="ltr"></pre>
+    </div>
+    <div id="q-answers" class="kq-answers"></div>
+    <div class="kq-foot">
+      <div id="q-stakes" class="kq-stakes">
+        <span id="q-icon" class="kq-icon"></span>
+        <div><b id="q-win">Right answer: Bug Bomb</b><span>Wrong answer: your kart spins out for 2 s</span></div>
+      </div>
+      <span class="kq-note">Your kart keeps driving straight while you answer</span>
+    </div>
+    <div id="q-verdict" class="kq-verdict hidden"></div>
+  </section>
+</main>
+
+<script src="../socket.io/socket.io.js"></script>
+<script src="../shared/game.js"></script>
+<script src="../shared/kart.js"></script>
+<script src="../kart-play.js"></script>
+</body>
+</html>

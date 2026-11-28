@@ -34,7 +34,7 @@ function newCar(carId) {
 function resetCar(car, carId) {
   const g = gridSlot(carId);
   car.totalS = g.totalS; car.d = g.d; car.latVel = 0; car.speed = 0;
-  car.slowT = 0; car.slowF = 1; car.wall = false;
+  car.slowT = 0; car.slowF = 1; car.wall = false; car.boostT = 0; car.boostF = 1;
   car.finished = false; car.finishTime = null; car.finishPos = null; car.dnf = false;
   car.obstacleCooldown = {};
   updatePose(car);
@@ -84,6 +84,8 @@ function step(list, race, settings, dt, events) {
       if (c.wall && steer !== 0) factor = Math.min(factor, PH.WALL_FACTOR);
       if (!p.connected) factor = Math.min(factor, PH.DISCONNECT_FACTOR);
       if (c.slowT > 0) { factor = Math.min(factor, c.slowF); c.slowT -= dt; }
+      // turbo (Code Kart Battle only; GDG Race never sets boostT): beats every slow-down while it lasts
+      if (c.boostT > 0) { factor = c.boostF; c.boostT -= dt; }
     }
     const targetSpeed = PH.MAX_SPEED * factor;
     if (c.speed < targetSpeed) c.speed = Math.min(targetSpeed, c.speed + PH.ACCEL * dt);
@@ -201,4 +203,4 @@ function completedLaps(car, laps) {
   return car.finished ? laps : clamp(Math.floor(Math.max(0, car.totalS) / P), 0, laps);
 }
 
-module.exports = { step, rank, newCar, resetCar, updatePose, gridSlot, completedLaps, wrapS, wrapDelta };
+module.exports = { step, rank, newCar, resetCar, updatePose, gridSlot, completedLaps, wrapS, wrapDelta, setSlow };

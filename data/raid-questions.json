@@ -1,0 +1,565 @@
+{
+ "source": "Copied (read-only) from CodeBreaker/data/questions.json - print-output items with short, distinct answers.",
+ "questions": [
+  {
+   "id": "PY-001",
+   "level": "easy",
+   "topic": "variables",
+   "prompt": "What will this code print?",
+   "code": "x = 10\nx += 5\nprint(x)",
+   "options": [
+    "10",
+    "15",
+    "5",
+    "Error"
+   ],
+   "answer": 1
+  },
+  {
+   "id": "PY-009",
+   "level": "easy",
+   "topic": "strings",
+   "prompt": "What will this code print?",
+   "code": "print(\"5\" + \"3\")",
+   "options": [
+    "53",
+    "8",
+    "\"53\"",
+    "Error"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "PY-012",
+   "level": "easy",
+   "topic": "functions",
+   "prompt": "What will this code print?",
+   "code": "print(len(\"neon\"))",
+   "options": [
+    "4",
+    "3",
+    "5",
+    "neon"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "PY-013",
+   "level": "easy",
+   "topic": "operators",
+   "prompt": "What will this code print?",
+   "code": "print(2 ** 3)",
+   "options": [
+    "8",
+    "6",
+    "9",
+    "5"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "PY-017",
+   "level": "easy",
+   "topic": "lists",
+   "prompt": "What will this code print?",
+   "code": "nums = [4, 8, 15]\nprint(nums[1])",
+   "options": [
+    "8",
+    "4",
+    "15",
+    "Error"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "PY-028",
+   "level": "easy",
+   "topic": "lists",
+   "prompt": "What will this code print?",
+   "code": "words = [\"ram\", \"disk\"]\nwords.append(\"cpu\")\nprint(len(words))",
+   "options": [
+    "3",
+    "2",
+    "4",
+    "Error"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "PY-029",
+   "level": "easy",
+   "topic": "tuples",
+   "prompt": "What will this code print?",
+   "code": "t = (1, 2, 3)\nprint(t[-1])",
+   "options": [
+    "3",
+    "1",
+    "2",
+    "Error"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "PY-042",
+   "level": "easy",
+   "topic": "sorting",
+   "prompt": "What will this code print?",
+   "code": "nums = [3, 1, 2]\nnums.sort()\nprint(nums)",
+   "options": [
+    "[1, 2, 3]",
+    "[3, 2, 1]",
+    "[3, 1, 2]",
+    "None"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "PY-052",
+   "level": "easy",
+   "topic": "strings",
+   "prompt": "What will this code print?",
+   "code": "x = 3\nprint(f\"x is {x}\")",
+   "options": [
+    "x is 3",
+    "x is {x}",
+    "3",
+    "Error"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "PY-054",
+   "level": "easy",
+   "topic": "operators",
+   "prompt": "What will this code print?",
+   "code": "print(10 / 4)",
+   "options": [
+    "2.5",
+    "2",
+    "3",
+    "Error"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "PY-055",
+   "level": "easy",
+   "topic": "type conversion",
+   "prompt": "What will this code print?",
+   "code": "print(int(\"7\") + 1)",
+   "options": [
+    "8",
+    "71",
+    "7",
+    "Error"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "PY-059",
+   "level": "easy",
+   "topic": "strings",
+   "prompt": "What will this code print?",
+   "code": "print(\"Py\" in \"Python\")",
+   "options": [
+    "True",
+    "False",
+    "Py",
+    "Error"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "PY-062",
+   "level": "easy",
+   "topic": "variables",
+   "prompt": "What will this code print?",
+   "code": "a, b = 2, 3\nprint(a * b)",
+   "options": [
+    "6",
+    "5",
+    "23",
+    "Error"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "PY-063",
+   "level": "easy",
+   "topic": "operators",
+   "prompt": "What will this code print?",
+   "code": "x = 5\nx -= 2\nprint(x)",
+   "options": [
+    "3",
+    "7",
+    "2",
+    "Error"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "PY-066",
+   "level": "easy",
+   "topic": "operators",
+   "prompt": "What will this code print?",
+   "code": "print(9 % 4)",
+   "options": [
+    "1",
+    "2",
+    "0",
+    "5"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "PY-067",
+   "level": "easy",
+   "topic": "loops",
+   "prompt": "What will this code print?",
+   "code": "for i in range(1, 4):\n    print(i, end=\" \")",
+   "options": [
+    "1 2 3",
+    "0 1 2 3",
+    "1 2 3 4",
+    "1 2"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "PY-073",
+   "level": "easy",
+   "topic": "built-in functions",
+   "prompt": "What will this code print?",
+   "code": "nums = [5, 2, 9]\nprint(max(nums) - min(nums))",
+   "options": [
+    "7",
+    "9",
+    "2",
+    "4"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "PY-076",
+   "level": "easy",
+   "topic": "dictionaries",
+   "prompt": "What will this code print?",
+   "code": "d = {\"x\": 1, \"y\": 2}\nfor k in d:\n    print(k, end=\"\")",
+   "options": [
+    "xy",
+    "12",
+    "x1y2",
+    "Error"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "PY-077",
+   "level": "easy",
+   "topic": "functions",
+   "prompt": "What will this code print?",
+   "code": "def add(a, b=10):\n    return a + b\nprint(add(5))",
+   "options": [
+    "15",
+    "5",
+    "10",
+    "Error"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "PY-095",
+   "level": "easy",
+   "topic": "dictionaries",
+   "prompt": "What will this code print?",
+   "code": "d = {\"a\": 1, \"b\": 2}\nprint(len(d))",
+   "options": [
+    "2",
+    "1",
+    "3",
+    "Error"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "PY-100",
+   "level": "easy",
+   "topic": "lists",
+   "prompt": "What will this code print?",
+   "code": "x = [3, 1, 2]\nx.reverse()\nprint(x)",
+   "options": [
+    "[2, 1, 3]",
+    "[1, 2, 3]",
+    "[3, 2, 1]",
+    "None"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "PY-103",
+   "level": "easy",
+   "topic": "lists",
+   "prompt": "What will this code print?",
+   "code": "print(sum([1, 2, 3, 4]))",
+   "options": [
+    "10",
+    "9",
+    "24",
+    "Error"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "PY-118",
+   "level": "easy",
+   "topic": "sets",
+   "prompt": "What will this code print?",
+   "code": "print(len(set([1, 1, 2, 3, 3])))",
+   "options": [
+    "3",
+    "5",
+    "2",
+    "Error"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "PY-181",
+   "level": "easy",
+   "topic": "TCP",
+   "prompt": "What will this code print?",
+   "code": "port = 25\nprint(port >= 1024)",
+   "options": [
+    "False",
+    "True",
+    "None",
+    "Error"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "PY-006",
+   "level": "medium",
+   "topic": "operators",
+   "prompt": "What will this code print?",
+   "code": "print(7 // 2, 7 % 2)",
+   "options": [
+    "3 1",
+    "3.5 1",
+    "4 0",
+    "3 3"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "PY-011",
+   "level": "medium",
+   "topic": "booleans",
+   "prompt": "What will this code print?",
+   "code": "print(not (2 > 3))",
+   "options": [
+    "True",
+    "False",
+    "None",
+    "Error"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "PY-018",
+   "level": "medium",
+   "topic": "slicing",
+   "prompt": "What will this code print?",
+   "code": "print([1, 2, 3, 4][1:3])",
+   "options": [
+    "[2, 3]",
+    "[1, 2, 3]",
+    "[2, 3, 4]",
+    "[1, 2]"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "PY-019",
+   "level": "medium",
+   "topic": "dictionaries",
+   "prompt": "What will this code print?",
+   "code": "d = {\"hp\": 3}\nd[\"hp\"] += 2\nprint(d[\"hp\"])",
+   "options": [
+    "5",
+    "3",
+    "2",
+    "Error"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "PY-027",
+   "level": "medium",
+   "topic": "dictionaries",
+   "prompt": "What will this code print?",
+   "code": "data = {\"a\": 1, \"b\": 2}\nprint(list(data.keys()))",
+   "options": [
+    "['a', 'b']",
+    "[1, 2]",
+    "['a', 1]",
+    "Error"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "PY-030",
+   "level": "medium",
+   "topic": "sets",
+   "prompt": "What will this code print?",
+   "code": "s = {1, 2, 2, 3}\nprint(len(s))",
+   "options": [
+    "3",
+    "4",
+    "2",
+    "Error"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "PY-040",
+   "level": "medium",
+   "topic": "IP addressing",
+   "prompt": "What will this code print?",
+   "code": "ip = \"192.168.1.10\"\nprint(ip.split(\".\")[0])",
+   "options": [
+    "192",
+    "168",
+    "10",
+    "Error"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "PY-041",
+   "level": "medium",
+   "topic": "IP addressing",
+   "prompt": "What will this code print?",
+   "code": "parts = \"10.0.0.1\".split(\".\")\nprint(len(parts))",
+   "options": [
+    "4",
+    "3",
+    "8",
+    "1"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "PY-061",
+   "level": "medium",
+   "topic": "dictionaries",
+   "prompt": "What will this code print?",
+   "code": "d = {\"a\": 1}\nprint(d.get(\"b\", 0))",
+   "options": [
+    "0",
+    "None",
+    "Error",
+    "1"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "PY-065",
+   "level": "medium",
+   "topic": "operators",
+   "prompt": "What will this code print?",
+   "code": "print(3 == 3.0)",
+   "options": [
+    "True",
+    "False",
+    "Error",
+    "None"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "PY-071",
+   "level": "medium",
+   "topic": "slicing",
+   "prompt": "What will this code print?",
+   "code": "print(\"abc\"[::-1])",
+   "options": [
+    "cba",
+    "abc",
+    "bca",
+    "Error"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "PY-074",
+   "level": "medium",
+   "topic": "tuples",
+   "prompt": "What will this code print?",
+   "code": "a, b = (1, 2)\na, b = b, a\nprint(a, b)",
+   "options": [
+    "2 1",
+    "1 2",
+    "2 2",
+    "Error"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "PY-075",
+   "level": "medium",
+   "topic": "sets",
+   "prompt": "What will this code print?",
+   "code": "print({1, 2} | {2, 3})",
+   "options": [
+    "{1, 2, 3}",
+    "{2}",
+    "{1, 3}",
+    "Error"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "PY-082",
+   "level": "medium",
+   "topic": "binary search",
+   "prompt": "What will this code print?",
+   "code": "lo, hi = 0, 7\nmid = (lo + hi) // 2\nprint(mid)",
+   "options": [
+    "3",
+    "4",
+    "3.5",
+    "7"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "PY-083",
+   "level": "medium",
+   "topic": "queues",
+   "prompt": "What will this code print?",
+   "code": "q = [1, 2, 3]\nq.pop(0)\nprint(q)",
+   "options": [
+    "[2, 3]",
+    "[1, 2]",
+    "[3]",
+    "[1, 2, 3]"
+   ],
+   "answer": 0
+  },
+  {
+   "id": "PY-098",
+   "level": "medium",
+   "topic": "strings",
+   "prompt": "What will this code print?",
+   "code": "print(\"a-b-c\".replace(\"-\", \"\"))",
+   "options": [
+    "abc",
+    "a-b-c",
+    "a b c",
+    "Error"
+   ],
+   "answer": 0
+  }
+ ]
+}

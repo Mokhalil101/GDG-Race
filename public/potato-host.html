@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Hot Potato Code - Big screen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=JetBrains+Mono:wght@600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="../station.css">
+<link rel="stylesheet" href="../potato.css">
+</head>
+<body class="potato-body">
+<div id="pstage">
+  <!-- station missing / closed -->
+  <section id="s-hold" class="scr hidden">
+    <div class="holdon" id="holdon" data-variant="locked">
+      <div class="lock-mascot" aria-hidden="true"><div class="lock-bob"><div class="shackle"></div><div class="shackle-in"></div>
+        <div class="lock-body"><span class="eye l"></span><span class="eye r"></span><span class="glint l"></span><span class="glint r"></span><span class="mouth"></span><span class="cheek l"></span><span class="cheek r"></span></div></div></div>
+      <section class="holdon-copy">
+        <h1 class="holdon-title" id="holdon-title">Hold on!</h1>
+        <p class="holdon-lead" id="holdon-lead">Connecting to the game station…</p>
+        <p class="holdon-body" id="holdon-body"></p>
+        <form id="dev-form" class="holdon-dev hidden" autocomplete="off">
+          <span class="tag">DEVELOPMENT ONLY · NO STATION KEY ON THIS SERVER</span>
+          <input id="dev-secret" type="password" placeholder="Dev host key" aria-label="Dev host key">
+          <button class="btn go" type="submit">Open Hot Potato</button>
+        </form>
+        <p id="hold-err" class="holdon-err" role="alert"></p>
+      </section>
+    </div>
+  </section>
+
+  <h1 class="p-title ol4 hidden" id="title">HOT POTATO<br><span>CODE</span></h1>
+
+  <!-- lobby -->
+  <section id="s-lobby" class="scr hidden" aria-label="Hot Potato Code lobby">
+    <div class="p-join">
+      <div class="how">Scan to grab a seat!</div>
+      <div class="qr"><img id="qr" alt="QR code to join Hot Potato Code"></div>
+      <div class="code-lbl">ROOM CODE</div>
+      <div class="code" id="l-code">----</div>
+      <div class="url" id="l-url"></div>
+    </div>
+    <div class="p-lobby-right">
+      <div class="p-rules">
+        <div class="p-rule"><b>Got the bomb?</b>Answer the quick question on your phone.</div>
+        <div class="p-rule"><b>Right = throw it</b>It flies to a random player. Wrong burns 2 s.</div>
+        <div class="p-rule"><b>BOOM!</b>Nobody knows the fuse. Last one standing wins.</div>
+      </div>
+      <div class="p-roster" aria-live="polite">
+        <h2>Players in the circle <span id="l-count">0 / 12</span></h2>
+        <div class="p-faces" id="l-faces"></div>
+      </div>
+      <div class="p-start">
+        <button class="btn go" id="b-start" disabled>LIGHT THE FUSE!</button>
+        <span class="hint" id="l-hint">Waiting for 4 players…</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- the circle -->
+  <section id="s-game" class="scr hidden" aria-label="Hot Potato Code">
+    <div class="p-stickers">
+      <div class="p-sticker"><span>ROUND</span><b id="g-round">1</b></div>
+      <div class="p-sticker y"><span>STILL IN</span><b id="g-alive">0/0</b></div>
+    </div>
+    <span class="spect hidden" id="g-spect"></span>
+    <div class="p-disc" aria-hidden="true"></div>
+    <div id="seats"></div>
+    <div class="p-center" id="center" aria-live="polite">
+      <span class="k" id="c-k">The bomb is with</span>
+      <b class="who ol3" id="c-who">…</b>
+      <span class="sub" id="c-sub">Answer to pass it on…</span>
+      <div class="fuse" id="c-fuse" role="img" aria-label="Fuse"><i id="c-fuse-i"></i></div>
+      <span class="fuse-lbl" id="c-fuse-lbl">FUSE LIT</span>
+    </div>
+    <div class="bomb hidden" id="bomb" aria-hidden="true"><div class="jit"><div class="ball"></div><span class="cap"></span><span class="wick"></span><span class="spark"></span><span class="eye l"></span><span class="eye r"></span></div></div>
+    <div id="bursts"></div>
+    <div class="p-feed" id="feed" aria-live="polite"></div>
+    <div class="p-banner hidden" id="banner"><div class="big" id="banner-big">PAUSED</div><div class="small" id="banner-small"></div></div>
+  </section>
+
+  <!-- winner -->
+  <section id="s-end" class="scr hidden" aria-label="Results">
+    <div class="p-end-title"><h1 id="e-title">LAST ONE STANDING!</h1><p id="e-sub"></p></div>
+    <div class="p-champ" id="e-champ">
+      <svg class="crown" viewBox="0 0 120 70" aria-hidden="true"><path d="M8 62 L14 18 L38 40 L60 6 L82 40 L106 18 L112 62 Z" fill="#fbbc04" stroke="#1b1340" stroke-width="6" stroke-linejoin="round"/><circle cx="60" cy="6" r="6" fill="#ea4335" stroke="#1b1340" stroke-width="3"/></svg>
+      <div class="big-face" id="e-face">?</div>
+      <div class="nm" id="e-name">—</div>
+      <div class="meta" id="e-meta"></div>
+    </div>
+    <div class="p-rank"><h2 id="e-rank-h">HOW LONG THEY LASTED</h2><ol id="e-rank"></ol></div>
+    <div class="p-end-actions"><button class="btn go" id="b-again">Play again!</button></div>
+  </section>
+
+  <nav class="dock hidden" id="dock" aria-label="Station controls">
+    <button class="btn small go" data-act="start">Start (Space)</button>
+    <button class="btn small warn" data-act="pause"><span id="pause-lbl">Pause</span> (P)</button>
+    <button class="btn small danger" data-act="end">End (E)</button>
+    <button class="btn small go" data-act="again">Play again (Space)</button>
+    <button class="btn small" data-act="mute">Sound: <span id="mute-lbl">on</span></button>
+    <button class="btn small" data-act="fullscreen">Full screen (F)</button>
+  </nav>
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+  <div class="conn-bad hidden" id="conn">Reconnecting…</div>
+</div>
+<script src="../socket.io/socket.io.js"></script>
+<script src="../potato-host.js"></script>
+</body>
+</html>

@@ -17,17 +17,21 @@ const r3 = (n) => Math.round(n * 1000) / 1000;
 const fail = (code, message) => ({ ok: false, code, error: message });
 
 class Room extends EventEmitter {
-  constructor({ id, code, hostToken, settings }) {
+  /**
+   * cars / maxPlayers / defaults let other race-based games (Code Kart Battle) reuse this room with their own grid.
+   */
+  constructor({ id, code, hostToken, settings, cars, maxPlayers, defaults }) {
     super();
+    this.cars = cars || CARS;
     this.id = id;
     this.code = code;
     this.hostToken = hostToken;
     this.hostConnected = true;
     this.status = STATUS.LOBBY;
-    this.maxPlayers = CONFIG.MAX_PLAYERS;
+    this.maxPlayers = maxPlayers || CONFIG.MAX_PLAYERS;
     this.createdAt = Date.now();
     this.lastActivity = Date.now();
-    this.settings = Object.assign({}, CONFIG.DEFAULTS);
+    this.settings = Object.assign({}, CONFIG.DEFAULTS, defaults || {});
     this.players = new Map();
     this.race = null;
     this.results = [];
@@ -41,13 +45,21 @@ class Room extends EventEmitter {
     if (settings) this.updateSettings(settings);
   }
 
+  // ---------- hooks (overridden by Code Kart Battle) ----------
+  /** Put a player's car back on its grid slot. */
+  _resetCar(p) { sim.resetCar(p.car, p.carId); }
+  /** One physics step for every car; `events` collects what the big screen should animate. */
+  _simStep(list, dt, events) { sim.step(list, this.race, this.settings, dt, events); }
+  /** Extra fields for a player's row in the results. */
+  _resultExtra() { return {}; }
+
   // ---------- output helpers ----------
   out(target, event, data) { this.emit('out', { target, event, data }); }
   touch() { this.lastActivity = Date.now(); }
 
   // ---------- public views ----------
   playerView(p) {
-    const car = CARS[p.carId - 1];
+    const car = this.cars[p.carId - 1];
     return {
       id: p.id, name: p.name, carId: p.carId, color: car.color, carName: car.name,
       connected: p.connected, raceStatus: p.raceStatus, joinedAt: p.joinedAt,
@@ -77,7 +89,7 @@ class Room extends EventEmitter {
     }
     return {
       ok: true, code: this.code, status: this.status, count: this.players.size, max: this.maxPlayers,
-      joinable, reason, cars: CARS.map((c) => ({ id: c.id, name: c.name, color: c.color, taken: taken.has(c.id) })),
+      joinable, reason, cars: this.cars.map((c) => ({ id: c.id, name: c.name, color: c.color, taken: taken.has(c.id) })),
     };
   }
 
@@ -99,19 +111,20 @@ class Room extends EventEmitter {
     let chosen = null;
     if (carId != null) {
       const id = Number(carId);
-      if (!Number.isInteger(id) || id < 1 || id > CARS.length) return fail('BAD_CAR', 'Unknown car.');
+      if (!Number.isInteger(id) || id < 1 || id > this.cars.length) return fail('BAD_CAR', 'Unknown car.');
       if (taken.has(id)) return fail('CAR_TAKEN', 'Someone just took that car. Pick another.');
       chosen = id;
     } else {
-      chosen = CARS.find((c) => !taken.has(c.id)).id;
+      chosen = this.cars.find((c) => !taken.has(c.id)).id;
     }
     const player = {
       id: crypto.randomBytes(6).toString('hex'),
       key: crypto.randomBytes(16).toString('hex'),
       name: clean, carId: chosen, connected: true, socketId: socketId || null,
       raceStatus: 'waiting', joinedAt: Date.now(), discAt: null,
-      steer: 0, steerAt: 0, car: sim.newCar(chosen),
+      steer: 0, steerAt: 0, car: {},
     };
+    this._resetCar(player);
     this.players.set(player.id, player);
     this.touch();
     this.out('host', EVT.PLAYER_JOINED, this.playerView(player));
@@ -163,11 +176,11 @@ class Room extends EventEmitter {
     if (!p) return fail('NO_PLAYER', 'Player not found.');
     if (this.status !== STATUS.LOBBY) return fail('BAD_STATE', 'Cars can only be changed in the lobby.');
     const id = Number(carId);
-    if (!Number.isInteger(id) || id < 1 || id > CARS.length) return fail('BAD_CAR', 'Unknown car.');
+    if (!Number.isInteger(id) || id < 1 || id > this.cars.length) return fail('BAD_CAR', 'Unknown car.');
     for (const o of this.players.values()) if (o !== p && o.carId === id) return fail('CAR_TAKEN', 'That car is taken.');
     p.carId = id;
-    sim.resetCar(p.car, id);
-    this.out('all', EVT.CAR_SELECTED, { playerId: p.id, carId: id, color: CARS[id - 1].color });
+    this._resetCar(p);
+    this.out('all', EVT.CAR_SELECTED, { playerId: p.id, carId: id, color: this.cars[id - 1].color });
     this.broadcastRoom();
     return { ok: true };
   }
@@ -211,7 +224,7 @@ class Room extends EventEmitter {
     if (this.status !== STATUS.LOBBY) return fail('BAD_STATE', 'The race can only be started from the lobby.');
     const connected = [...this.players.values()].filter((p) => p.connected);
     if (connected.length === 0) return fail('NO_PLAYERS', 'Waiting for at least one player.');
-    for (const p of this.players.values()) { sim.resetCar(p.car, p.carId); p.raceStatus = 'waiting'; p.steer = 0; }
+    for (const p of this.players.values()) { this._resetCar(p); p.raceStatus = 'waiting'; p.steer = 0; }
     this.results = [];
     this.status = STATUS.COUNTDOWN;
     this.cd = CONFIG.COUNTDOWN_SECONDS;
@@ -286,7 +299,7 @@ class Room extends EventEmitter {
     this.lastCdValue = null;
     for (const p of this.players.values()) {
       p.raceStatus = 'waiting'; p.steer = 0;
-      sim.resetCar(p.car, p.carId);
+      this._resetCar(p);
     }
     this.broadcastRoom();
     this.touch();
@@ -322,14 +335,14 @@ class Room extends EventEmitter {
       if (!p.car.finished) { p.car.dnf = true; p.raceStatus = 'dnf'; } else p.raceStatus = 'finished';
     }
     const ranked = sim.rank(list);
-    this.results = ranked.map((p, i) => ({
+    this.results = ranked.map((p, i) => Object.assign({
       resultId: this.race.id + '-' + (i + 1), raceId: this.race.id, playerId: p.id, name: p.name,
-      carId: p.carId, color: CARS[p.carId - 1].color,
+      carId: p.carId, color: this.cars[p.carId - 1].color,
       finishPosition: i + 1,
       finishTime: p.car.finished ? r3(p.car.finishTime) : null,
       completedLaps: sim.completedLaps(p.car, this.settings.laps),
       resultStatus: p.car.finished ? 'Finished' : 'DNF',
-    }));
+    }, this._resultExtra(p)));
     this.history.push({ raceId: this.race.id, endedAt: Date.now(), reason, results: this.results });
     this.status = STATUS.FINISHED;
     this.out('all', EVT.RACE_FINISHED, { raceId: this.race.id, reason, results: this.results });
@@ -379,7 +392,7 @@ class Room extends EventEmitter {
       if (p.steer !== 0 && this.clock - p.steerAt > CONFIG.PHYS.STEER_TIMEOUT_SEC) p.steer = 0;
     }
     const events = [];
-    sim.step(list, this.race, this.settings, dt, events);
+    this._simStep(list, dt, events);
     for (const e of events) {
       this.pendingEvents.push(e);
       if (e.type === 'finish') {
@@ -418,7 +431,7 @@ class Room extends EventEmitter {
     return {
       status: this.status, laps: this.settings.laps, raceTime: this.race ? r1(this.race.time) : 0,
       rows: ranked.map((p, i) => ({
-        pos: i + 1, id: p.id, name: p.name, carId: p.carId, color: CARS[p.carId - 1].color,
+        pos: i + 1, id: p.id, name: p.name, carId: p.carId, color: this.cars[p.carId - 1].color,
         lap: Math.min(this.settings.laps, Math.max(0, Math.floor(Math.max(0, p.car.totalS) / TRACK.P)) + 1),
         progress: r3(clamp(p.car.totalS / (this.settings.laps * TRACK.P), 0, 1)),
         finished: p.car.finished, dnf: p.car.dnf, finishTime: p.car.finished ? r3(p.car.finishTime) : null,
@@ -429,8 +442,11 @@ class Room extends EventEmitter {
 }
 
 class RoomManager extends EventEmitter {
-  constructor() {
+  /** RoomClass / roomOptions: other race-based games plug in their own Room subclass. */
+  constructor({ RoomClass = Room, roomOptions = {} } = {}) {
     super();
+    this.RoomClass = RoomClass;
+    this.roomOptions = roomOptions;
     this.rooms = new Map(); // code -> Room
   }
 
@@ -445,10 +461,10 @@ class RoomManager extends EventEmitter {
 
   createRoom(settings) {
     const code = this._newCode();
-    const room = new Room({
+    const room = new this.RoomClass(Object.assign({}, this.roomOptions, {
       id: crypto.randomBytes(5).toString('hex'), code,
       hostToken: crypto.randomBytes(24).toString('hex'), settings,
-    });
+    }));
     room.on('out', (msg) => this.emit('out', code, msg));
     this.rooms.set(code, room);
     return room;

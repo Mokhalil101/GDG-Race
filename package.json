@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node server/index.js",
     "dev": "node --watch server/index.js",
-    "test": "node --test test/game.test.js"
+    "test": "node --test test/game.test.js test/station.test.js test/gating.test.js test/raid.test.js test/kart.test.js test/potato.test.js test/among.test.js"
   },
   "dependencies": {
     "express": "^4.21.2",

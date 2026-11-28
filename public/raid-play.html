@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#1B1340">
+<meta name="robots" content="noindex">
+<title>Boss Raid</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=JetBrains+Mono:wght@600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="../raid.css">
+</head>
+<body class="raid-body">
+<!-- join -->
+<main id="v-join" class="phone join">
+  <div class="p-brand"><span class="brand"><span class="dots"><i></i><i></i><i></i><i></i></span><span>GDG ASSIUT</span></span></div>
+  <form class="p-join" id="join-form" autocomplete="off">
+    <div class="p-mini-boss" aria-hidden="true"><div class="boss"><span class="horn l"></span><span class="horn r"></span><div class="bod"><div class="eye"><svg viewBox="0 0 100 100"><path d="M50 50 m0 -6 a6 6 0 1 1 -6 6 a12 12 0 1 1 12 12 a20 20 0 1 1 -20 -20 a28 28 0 1 1 28 28 a36 36 0 0 1 -36 -36" fill="none" stroke="#1b1340" stroke-width="9" stroke-linecap="round"/></svg></div><div class="mouth"><i></i><i></i><i></i><i></i></div></div></div></div>
+    <h1 class="outlined tilt">BOSS RAID</h1>
+    <p class="sub">The whole hall vs The Infinite Loop</p>
+    <label>Room <input id="r-code" maxlength="4" autocapitalize="characters" autocorrect="off" spellcheck="false" placeholder="ABCD" inputmode="text"></label>
+    <label>Your name <input id="r-name" maxlength="16" autocomplete="nickname" placeholder="Raider name"></label>
+    <p class="p-msg" id="join-msg" role="status"></p>
+    <button class="btn go" id="join-btn" type="submit">JOIN THE RAID!</button>
+  </form>
+</main>
+
+<!-- game -->
+<main id="v-game" class="phone hidden">
+  <header class="p-head">
+    <div class="who">
+      <span>YOU FIGHT FOR</span>
+      <b class="ol3" id="g-team">TEAM RED</b>
+      <small id="g-name"></small>
+    </div>
+    <div class="combo off" id="g-combo" aria-label="Combo">
+      <svg width="26" height="30" viewBox="0 0 24 28" aria-hidden="true"><path d="M12 1c2 6 9 9 9 17a9 9 0 0 1-18 0c0-4 2-6 4-8 0 3 1 5 3 5-1-6 2-10 2-14z" fill="#ea4335" stroke="#1b1340" stroke-width="2" stroke-linejoin="round"/><path d="M12 14c1 3 4 4 4 8a4 4 0 0 1-8 0c0-2 1-3 2-4 0 1 1 2 2 2z" fill="#fbbc04"/></svg>
+      <b id="g-combo-n">x0</b>
+    </div>
+  </header>
+
+  <div class="p-timer" id="g-timer">
+    <span class="rd" id="g-left">20</span>
+    <span class="tb"><i id="g-bar"></i></span>
+  </div>
+
+  <div class="p-main" id="g-main">
+    <div class="p-q" id="g-q">
+      <b id="g-prompt">What does this print?</b>
+      <pre id="g-code" dir="ltr"></pre>
+    </div>
+    <div class="p-ans" id="g-ans" role="group" aria-label="Answers"></div>
+  </div>
+
+  <div class="p-wait hidden" id="g-wait"></div>
+
+  <footer class="p-foot">
+    <span>Your hits: <b id="g-hits">0</b> · <span id="g-dmg">0</span> damage</span>
+    <span id="g-tip">Fast answers hit harder</span>
+  </footer>
+</main>
+<div class="p-conn hidden" id="p-conn">Reconnecting…</div>
+
+<script src="../socket.io/socket.io.js"></script>
+<script src="../raid-play.js"></script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#d93025">
+<meta name="robots" content="noindex">
+<title>Hot Potato Code</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=JetBrains+Mono:wght@600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="../potato.css">
+</head>
+<body class="potato-body">
+<!-- join -->
+<main id="v-join" class="pp join">
+  <div class="pp-brand"><span class="brand"><span class="dots"><i></i><i></i><i></i><i></i></span><span>GDG ASSIUT</span></span></div>
+  <form class="pp-form" id="join-form" autocomplete="off">
+    <div class="mini-bomb calm" aria-hidden="true"><div class="ball"></div><span class="cap"></span><span class="spark"></span></div>
+    <h1 class="ol4">HOT POTATO<br><span>CODE</span></h1>
+    <p class="sub">Answer fast, throw the bomb, don't be holding it!</p>
+    <label>Room <input id="r-code" maxlength="4" autocapitalize="characters" autocorrect="off" spellcheck="false" placeholder="ABCD" inputmode="text"></label>
+    <label>Your name <input id="r-name" maxlength="16" autocomplete="nickname" placeholder="Your name"></label>
+    <p class="pp-msg" id="join-msg" role="status"></p>
+    <button class="btn go" id="join-btn" type="submit">GRAB A SEAT!</button>
+  </form>
+</main>
+
+<!-- game -->
+<main id="v-game" class="pp hidden">
+  <header class="pp-head">
+    <span class="pp-pill" id="g-me">You · round 1</span>
+    <span class="pp-pill dk" id="g-alive">0 still in</span>
+  </header>
+
+  <!-- holder: YOU HAVE THE BOMB -->
+  <section class="pp-body hidden" id="g-hot" aria-live="assertive">
+    <div class="pp-hero">
+      <div class="mini-bomb" aria-hidden="true"><div class="ball"></div><span class="cap"></span><span class="spark"></span></div>
+      <h1 class="ol4">YOU HAVE<br>THE BOMB!</h1>
+    </div>
+    <div class="pp-fuse" id="g-fuse">
+      <b id="g-secs">9</b>
+      <div><span>seconds left on the fuse</span><i><em id="g-fuse-bar"></em></i></div>
+    </div>
+    <div class="pp-q">
+      <span class="kind" id="g-kind">TRUE OR FALSE · quick!</span>
+      <b id="g-prompt">…</b>
+      <pre id="g-code" dir="ltr"></pre>
+    </div>
+    <div class="pp-ans" id="g-ans" role="group" aria-label="Answers">
+      <button type="button" class="a0" data-i="0">TRUE</button>
+      <button type="button" class="a1" data-i="1">FALSE</button>
+    </div>
+    <span class="pp-note">Right answer throws the bomb to a random player · wrong answer burns 2 s</span>
+  </section>
+
+  <!-- everyone else -->
+  <section class="pp-body hidden" id="g-wait" aria-live="polite"></section>
+</main>
+<div class="pp-conn hidden" id="p-conn">Reconnecting…</div>
+
+<script src="../socket.io/socket.io.js"></script>
+<script src="../potato-play.js"></script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Code Kart Battle - Host</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="../host.css">
+<link rel="stylesheet" href="../station.css">
+<link rel="stylesheet" href="../kart.css">
+</head>
+<body class="kart">
+<div id="stage">
+  <div id="game"></div>
+
+  <div id="ui">
+    <!-- No (or a closed) station: the "Hold on!" screen. The dev-only host key form shows when the server has no station key. -->
+    <section id="screen-login" class="screen">
+      <div class="holdon" id="holdon" data-variant="locked">
+        <div class="lock-mascot" aria-hidden="true"><div class="lock-bob"><div class="shackle"></div><div class="shackle-in"></div>
+          <div class="lock-body"><span class="eye l"></span><span class="eye r"></span><span class="glint l"></span><span class="glint r"></span><span class="mouth"></span><span class="cheek l"></span><span class="cheek r"></span></div></div></div>
+        <section class="holdon-copy">
+          <h1 class="holdon-title" id="holdon-title">Hold on!</h1>
+          <p class="holdon-lead" id="holdon-lead">Connecting to the game station…</p>
+          <p class="holdon-body" id="holdon-body">Games start at the game stations. Find someone from the <b>Registration Team</b> (green badge) and they'll open a game for you.</p>
+          <form id="login-form" class="holdon-dev hidden" autocomplete="off">
+            <span class="tag">DEVELOPMENT ONLY · NO STATION KEY ON THIS SERVER</span>
+            <input id="secret" type="password" placeholder="Dev host key" aria-label="Dev host key">
+            <button class="btn go" type="submit">Create kart room!</button>
+          </form>
+          <p id="login-error" class="holdon-err" role="alert"></p>
+          <a class="holdon-link hidden" id="holdon-link" href="#">Registration Team member? Sign in to open a station</a>
+        </section>
+      </div>
+    </section>
+
+    <!-- Lobby -->
+    <section id="screen-lobby" class="screen hidden sunny">
+      <div class="clouds" aria-hidden="true"><i></i><i></i><i></i></div>
+      <header class="lobby-head">
+        <div class="brand" id="brand-lobby"></div>
+        <div class="title"><span class="outlined tilt">CODE KART</span><small>Battle! · answer, grab items, race</small></div>
+        <div class="count"><b id="lobby-count">0</b><span>/ <span id="lobby-max">8</span> racers</span></div>
+      </header>
+      <div class="lobby-body">
+        <div class="join-card">
+          <ol class="steps"><li><i>1</i>Scan</li><li><i>2</i>Name</li><li><i>3</i>Pick a kart</li><li><i>4</i>Battle!</li></ol>
+          <div class="qr"><img id="qr" alt="QR code to join"></div>
+          <div class="room-label">ROOM CODE</div>
+          <div id="room-code" class="room-code outlined">----</div>
+          <div id="join-url" class="url"></div>
+        </div>
+        <div class="players-card">
+          <div id="slots" class="slots"></div>
+          <div class="k-rules">
+            <span class="qbox sm" aria-hidden="true">?</span>
+            <span class="k-rules-t">Drive over a <b>? box</b> · answer on your phone in 5 s · right = item, wrong = spin out</span>
+            <span class="k-items" id="lobby-items"></span>
+          </div>
+          <div class="settings">
+            <div class="set"><span>Laps</span>
+              <button class="btn small round" id="laps-minus" aria-label="Fewer laps">−</button><b id="laps-val">3</b><button class="btn small round" id="laps-plus" aria-label="More laps">+</button></div>
+            <div class="set"><span>Bump penalty</span>
+              <select id="penalty"><option value="0.2">Low</option><option value="0.35">Medium</option><option value="0.55">High</option></select></div>
+            <div class="set"><span>Cones</span>
+              <select id="obstacles"><option value="0">Off</option><option value="1">On</option></select></div>
+          </div>
+          <div class="start-row">
+            <button id="btn-start" class="btn go start" disabled>START BATTLE!</button>
+            <div id="lobby-hint" class="hint">Waiting for players…</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Countdown -->
+    <section id="screen-countdown" class="screen hidden">
+      <div class="cd-wrap">
+        <div id="cd-number" class="cd-number">10</div>
+        <div id="cd-sub" class="cd-sub">GET READY</div>
+      </div>
+    </section>
+
+    <!-- Race HUD: lap/time, RACERS · ITEMS panel, live feed -->
+    <section id="screen-hud" class="hidden">
+      <div class="hud-top">
+        <div class="hud-box lap"><span class="k">LAP</span><b id="hud-lap">1/3</b></div>
+        <div class="hud-box"><span class="k">TIME</span><b id="hud-time">0:00.0</b></div>
+      </div>
+      <div class="hud-brand"><div class="brand" id="brand-hud"></div></div>
+      <aside class="board k-board">
+        <h3>RACERS · ITEMS</h3>
+        <ol id="board"></ol>
+      </aside>
+      <div id="feed" class="k-feed" aria-live="polite"></div>
+      <div id="go-flash" class="go-flash hidden">GO!</div>
+      <div id="pause-banner" class="banner hidden"><span>PAUSED</span></div>
+    </section>
+
+    <!-- Results -->
+    <section id="screen-results" class="screen hidden sunny results-bg">
+      <div class="clouds" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="results-brand"><div class="brand" id="brand-results"></div></div>
+      <h1 id="results-title" class="outlined">WINNER</h1>
+      <div id="podium" class="podium"></div>
+      <div class="results-bar">
+        <ol id="results-list" class="results-list"></ol>
+        <div class="bar-right">
+          <span class="keyhint">Press <b>N</b> for a new round</span>
+          <button id="btn-new" class="btn go">Battle again!</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Host controls -->
+    <nav id="controls" class="controls hidden" aria-label="Host controls">
+      <button class="btn small go" data-act="start">Start (Space)</button>
+      <button class="btn small warn" data-act="cancel">Cancel countdown</button>
+      <button class="btn small warn" data-act="pause">Pause (P)</button>
+      <button class="btn small go" data-act="resume">Resume (P)</button>
+      <button class="btn small danger" data-act="abort">Abort (A)</button>
+      <button class="btn small" data-act="reset">Reset (R)</button>
+      <button class="btn small" data-act="mute">Sound: <span id="mute-label">on</span> (M)</button>
+      <button class="btn small" data-act="fullscreen">Fullscreen (F)</button>
+    </nav>
+
+    <div id="toasts"></div>
+    <div id="conn" class="conn hidden">Reconnecting…</div>
+  </div>
+</div>
+
+<script src="../vendor/phaser/phaser.min.js"></script>
+<script src="../socket.io/socket.io.js"></script>
+<script src="../shared/game.js"></script>
+<script src="../shared/kart.js"></script>
+<script src="../kart-host.js"></script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Boss Raid - Big screen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=JetBrains+Mono:wght@600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="../station.css">
+<link rel="stylesheet" href="../raid.css">
+</head>
+<body class="raid-body">
+<div id="rstage">
+  <div id="stars" aria-hidden="true"></div>
+
+  <!-- station missing / closed -->
+  <section id="s-hold" class="scr hidden">
+    <div class="holdon" id="holdon" data-variant="locked">
+      <div class="lock-mascot" aria-hidden="true"><div class="lock-bob"><div class="shackle"></div><div class="shackle-in"></div>
+        <div class="lock-body"><span class="eye l"></span><span class="eye r"></span><span class="glint l"></span><span class="glint r"></span><span class="mouth"></span><span class="cheek l"></span><span class="cheek r"></span></div></div></div>
+      <section class="holdon-copy">
+        <h1 class="holdon-title" id="holdon-title">Hold on!</h1>
+        <p class="holdon-lead" id="holdon-lead">Connecting to the game station…</p>
+        <p class="holdon-body" id="holdon-body"></p>
+        <form id="dev-form" class="holdon-dev hidden" autocomplete="off">
+          <span class="tag">DEVELOPMENT ONLY · NO STATION KEY ON THIS SERVER</span>
+          <input id="dev-secret" type="password" placeholder="Dev host key" aria-label="Dev host key">
+          <button class="btn go" type="submit">Open Boss Raid</button>
+        </form>
+        <p id="hold-err" class="holdon-err" role="alert"></p>
+      </section>
+    </div>
+  </section>
+
+  <!-- lobby -->
+  <section id="s-lobby" class="scr hidden" aria-label="Boss Raid lobby">
+    <header class="r-head">
+      <div class="row">
+        <h1 class="r-title ol4">THE INFINITE LOOP</h1>
+        <span class="r-sub">Boss Raid · the whole hall vs one boss</span>
+        <span class="pill"><span id="l-count">0</span> players ready</span>
+      </div>
+    </header>
+    <div class="lobby-join">
+      <div class="how">Scan to join the raid!</div>
+      <div class="qr"><img id="qr" alt="QR code to join the raid"></div>
+      <div class="code-lbl">ROOM CODE</div>
+      <div class="code" id="l-code">----</div>
+      <div class="url" id="l-url"></div>
+    </div>
+    <div class="lobby-right">
+      <div class="rules">
+        <div class="rule"><b>8 rounds</b>A question on the screen and on your phone.</div>
+        <div class="rule"><b>Hit fast</b>Right answers hit the boss. Faster = harder.</div>
+        <div class="rule"><b>Combo!</b>Right in a row builds x2, x3, x4…</div>
+      </div>
+      <div class="tchips" id="l-teams"></div>
+      <div class="joined" id="l-joined" aria-live="polite"></div>
+      <div class="lobby-start">
+        <button class="btn go" id="b-start" disabled>START RAID!</button>
+        <span class="hint" id="l-hint">Waiting for players…</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- fight: intro / question / reveal -->
+  <section id="s-fight" class="scr hidden" aria-label="Boss Raid">
+    <header class="r-head">
+      <div class="row">
+        <h1 class="r-title ol4">THE INFINITE LOOP</h1>
+        <span class="r-sub" id="f-round">Boss Raid · round 1 of 8</span>
+        <span class="pill"><span id="f-count">0</span> players fighting</span>
+      </div>
+      <div class="hpbar" role="meter" aria-label="Boss HP" id="f-hpbar" aria-valuemin="0"><span class="fill" id="f-hp"></span><span class="lbl">BOSS HP</span><b id="f-hptxt">0 / 0 HP</b></div>
+    </header>
+    <div class="boss" id="boss" aria-hidden="true">
+      <span class="horn l"></span><span class="horn r"></span>
+      <div class="bod">
+        <div class="eye"><svg width="110" height="110" viewBox="0 0 100 100"><path d="M50 50 m0 -6 a6 6 0 1 1 -6 6 a12 12 0 1 1 12 12 a20 20 0 1 1 -20 -20 a28 28 0 1 1 28 28 a36 36 0 0 1 -36 -36" fill="none" stroke="#1b1340" stroke-width="8" stroke-linecap="round"/></svg></div>
+        <div class="mouth"><i></i><i></i><i></i><i></i></div>
+      </div>
+    </div>
+    <div class="hits" id="hits"></div>
+    <aside class="teams" aria-label="Team damage"><h2>TEAM DAMAGE</h2><div id="f-teams"></div></aside>
+    <aside class="mvps" aria-label="Top hitters"><h2>TOP HITTERS</h2><div id="f-mvps"></div></aside>
+    <div class="rbanner hidden" id="f-rbanner"></div>
+    <div class="banner hidden" id="f-banner"><div class="big" id="f-banner-big">GET READY</div><div class="small" id="f-banner-small"></div></div>
+    <span class="pill answered hidden" id="f-answered">0 answered</span>
+    <section class="qbar" id="qbar" aria-live="polite">
+      <span class="clock" id="q-clock">20</span>
+      <div class="qt">
+        <b id="q-prompt">Hit the boss!</b>
+        <code id="q-code" dir="ltr"></code>
+      </div>
+      <div class="keys" id="q-keys"></div>
+    </section>
+  </section>
+
+  <!-- victory / defeat -->
+  <section id="s-end" class="scr hidden" aria-label="Raid results">
+    <div class="end-title"><h1 id="e-title">BOSS DEFEATED!</h1><p id="e-sub"></p></div>
+    <div class="end-cards">
+      <div class="ecard"><h2>FINAL HIT</h2><div class="hero" id="e-final">—</div><div class="tm" id="e-final-team"></div><div class="meta" id="e-final-meta"></div>
+        <div class="ko" aria-hidden="true"><div class="p-mini-boss"><div class="boss" id="end-boss"><span class="horn l"></span><span class="horn r"></span><div class="bod"><div class="eye"><svg viewBox="0 0 100 100"><path d="M50 50 m0 -6 a6 6 0 1 1 -6 6 a12 12 0 1 1 12 12 a20 20 0 1 1 -20 -20 a28 28 0 1 1 28 28 a36 36 0 0 1 -36 -36" fill="none" stroke="#1b1340" stroke-width="9" stroke-linecap="round"/></svg></div><div class="mouth"><i></i><i></i><i></i><i></i></div></div></div></div><span class="stamp" id="e-stamp">K.O.</span></div></div>
+      <div class="ecard"><h2>TOP TEAM</h2><div class="tm" id="e-team" style="font-size: 40px"></div><div class="meta" id="e-team-meta"></div><div id="e-team-bars"></div></div>
+      <div class="ecard dark"><h2>TOP HITTERS</h2><ol id="e-mvps"></ol></div>
+    </div>
+    <div class="end-stats" id="e-stats"></div>
+    <div class="end-actions"><button class="btn go" id="b-again">Raid again!</button></div>
+  </section>
+
+  <nav class="dock hidden" id="dock" aria-label="Station controls">
+    <button class="btn small go" data-act="start">Start (Space)</button>
+    <button class="btn small go" data-act="next">Next (N)</button>
+    <button class="btn small warn" data-act="pause"><span id="pause-lbl">Pause</span> (P)</button>
+    <button class="btn small danger" data-act="end">End (E)</button>
+    <button class="btn small" data-act="mute">Sound: <span id="mute-lbl">on</span></button>
+    <button class="btn small" data-act="fullscreen">Full screen (F)</button>
+  </nav>
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+  <div class="conn-bad hidden" id="conn">Reconnecting…</div>
+</div>
+<script src="../socket.io/socket.io.js"></script>
+<script src="../raid-host.js"></script>
+</body>
+</html>

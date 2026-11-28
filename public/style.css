@@ -1,40 +1,80 @@
-/* GDG RACE - shared neon design system (SRS 3). Used by host.html and play.html. */
+/* GDG RACE - shared "sticker arcade" design kit. Used by host.html and play.html.
+   Ink outlines + hard drop shadows, cream stickers, Google colours, Baloo 2. */
 :root {
-  --navy: #080B1A; --panel: #111A35; --panel2: #18234a;
+  --ink: #1B1340; --cream: #FFF6E0; --cream2: #F3E7C6; --muted: #5B4F86;
   --blue: #4285F4; --red: #EA4335; --yellow: #FBBC04; --green: #34A853;
-  --cyan: #00E5FF; --purple: #A855F7; --white: #fff; --gray: #A7B0C0;
-  --font: 'Rajdhani', 'Segoe UI', system-ui, -apple-system, 'Noto Sans Arabic', Roboto, Arial, sans-serif;
-  --display: 'Orbitron', 'Rajdhani', 'Segoe UI', system-ui, sans-serif;
+  --blue-d: #1A73E8; --red-d: #D93025; --green-d: #1E8E3E; --yellow-l: #FFE7A0;
+  --purple: #A142F4; --sky: #5EC8FF; --sky2: #9BE0FF; --grass: #5CC46A; --grass2: #4FB85E;
+  --white: #fff;
+  --font: 'Baloo 2', 'Segoe UI', system-ui, -apple-system, 'Noto Sans Arabic', Roboto, Arial, sans-serif;
+  --display: var(--font);
+  /* outlined display text */
+  --outline-4: 4px 0 0 var(--ink), -4px 0 0 var(--ink), 0 4px 0 var(--ink), 0 -4px 0 var(--ink), 3px 3px 0 var(--ink), -3px 3px 0 var(--ink), 3px -3px 0 var(--ink), -3px -3px 0 var(--ink);
+  --outline-6: 6px 0 0 var(--ink), -6px 0 0 var(--ink), 0 6px 0 var(--ink), 0 -6px 0 var(--ink), 4px 4px 0 var(--ink), -4px 4px 0 var(--ink), 4px -4px 0 var(--ink), -4px -4px 0 var(--ink);
 }
 * { box-sizing: border-box; }
-html, body { margin: 0; height: 100%; background: var(--navy); color: var(--white); font-family: var(--font); overflow: hidden; }
-button { font-family: inherit; cursor: pointer; }
+html, body { margin: 0; height: 100%; background: var(--sky); color: var(--ink); font-family: var(--font); overflow: hidden; }
+button { font-family: inherit; cursor: pointer; color: inherit; }
 .hidden { display: none !important; }
 
-/* brand */
-.brand { display: inline-flex; align-items: center; gap: 12px; font-family: var(--display); font-weight: 800; letter-spacing: .08em; }
-.brand .dots { display: inline-flex; gap: 5px; }
-.brand .dots i { width: 12px; height: 12px; border-radius: 50%; display: block; }
+/* outlined sticker title */
+.outlined { color: var(--yellow); font-weight: 800; line-height: 1; text-shadow: var(--outline-4), 0 8px 0 var(--ink); }
+.outlined.cream { color: var(--cream); }
+.tilt { display: inline-block; transform: rotate(-3deg); }
+
+/* brand chip */
+.brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: .02em; background: var(--cream);
+  border: 3px solid var(--ink); border-radius: 999px; padding: 2px 16px 0; box-shadow: 0 4px 0 var(--ink); line-height: 1.5; white-space: nowrap; }
+.brand .dots { display: inline-flex; gap: 4px; }
+.brand .dots i { width: 12px; height: 12px; border-radius: 50%; display: block; border: 2px solid var(--ink); }
 .brand .dots i:nth-child(1) { background: var(--blue); } .brand .dots i:nth-child(2) { background: var(--red); }
 .brand .dots i:nth-child(3) { background: var(--yellow); } .brand .dots i:nth-child(4) { background: var(--green); }
-.brand img { height: 48px; width: auto; display: block; }
-.neon { text-shadow: 0 0 8px rgba(0,229,255,.8), 0 0 24px rgba(0,229,255,.45); }
+.brand img { height: 40px; width: auto; display: block; }
+.brand:has(img) { padding: 4px 14px; }
+
+/* 3D pill buttons */
 .btn {
-  border: 2px solid var(--cyan); background: rgba(0,229,255,.08); color: var(--white); border-radius: 14px;
-  padding: 10px 22px; font-size: 22px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
-  box-shadow: 0 0 14px rgba(0,229,255,.25); transition: transform .08s, background .15s, box-shadow .15s;
+  border: 4px solid var(--ink); background: var(--white); color: var(--ink); border-radius: 999px;
+  padding: 6px 22px 3px; font-size: 22px; font-weight: 800; line-height: 1.3;
+  box-shadow: 0 6px 0 var(--ink), inset 0 -5px 0 rgba(0,0,0,.1); transition: transform .08s, box-shadow .08s, background .15s;
 }
-.btn:hover { background: rgba(0,229,255,.2); box-shadow: 0 0 24px rgba(0,229,255,.5); }
-.btn:active { transform: scale(.97); }
-.btn:disabled { opacity: .35; cursor: not-allowed; box-shadow: none; }
-.btn.go { border-color: var(--green); background: rgba(52,168,83,.18); box-shadow: 0 0 18px rgba(52,168,83,.4); }
-.btn.go:hover { background: rgba(52,168,83,.35); }
-.btn.danger { border-color: var(--red); background: rgba(234,67,53,.14); box-shadow: 0 0 14px rgba(234,67,53,.3); }
-.btn.warn { border-color: var(--yellow); background: rgba(251,188,4,.12); box-shadow: 0 0 14px rgba(251,188,4,.3); }
-.btn.small { padding: 6px 14px; font-size: 17px; border-radius: 10px; }
+.btn:hover { background: var(--cream); }
+.btn:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 2px 0 var(--ink), inset 0 -3px 0 rgba(0,0,0,.1); }
+.btn:focus-visible { outline: 4px solid var(--blue-d); outline-offset: 4px; }
+.btn:disabled, .btn.go:disabled, .btn.danger:disabled { background: #D9D2BF; color: #8A82A8; cursor: not-allowed; box-shadow: 0 4px 0 #8A82A8; border-color: #8A82A8; }
+.btn.go { background: var(--yellow); }
+.btn.go:hover:not(:disabled) { background: #FFC928; }
+.btn.danger { background: var(--red-d); color: #fff; }
+.btn.danger:hover { background: #E8453A; }
+.btn.warn { background: var(--yellow-l); }
+.btn.small { padding: 3px 14px 1px; font-size: 17px; border-width: 3px; box-shadow: 0 4px 0 var(--ink); }
+.btn.small:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 var(--ink); }
+
 input, select {
-  font-family: inherit; font-size: 22px; color: var(--white); background: var(--panel); border: 2px solid #2a3a73;
-  border-radius: 12px; padding: 12px 14px; outline: none; width: 100%;
+  font-family: inherit; font-size: 22px; font-weight: 700; color: var(--ink); background: var(--white); border: 4px solid var(--ink);
+  border-radius: 18px; padding: 10px 14px 6px; outline: none; width: 100%; box-shadow: inset 0 4px 0 rgba(27,19,64,.08);
 }
-input:focus, select:focus { border-color: var(--cyan); box-shadow: 0 0 14px rgba(0,229,255,.35); }
-.muted { color: var(--gray); }
+input::placeholder { color: #A39DBA; font-weight: 600; }
+input:focus, select:focus { border-color: var(--blue-d); box-shadow: 0 0 0 4px rgba(66,133,244,.35); }
+select { appearance: none; -webkit-appearance: none; cursor: pointer; padding-right: 40px;
+  background: var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='10' viewBox='0 0 16 10'%3E%3Cpath d='M2 2l6 6 6-6' fill='none' stroke='%231B1340' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 14px center; }
+.muted { color: var(--muted); }
+
+/* cartoon toy car (top-down, facing right). Size with --w; colour with --c. */
+.toy { --w: 86px; --c: var(--red); position: relative; display: inline-block; width: var(--w); height: calc(var(--w) * .54); flex: none; }
+.toy::before, .toy::after { content: ''; position: absolute; width: 22%; height: 22%; border-radius: 22%; background: var(--ink); }
+.toy::before { left: 6%; top: 0; } .toy::after { left: 6%; bottom: 0; }
+.toy i.wf { position: absolute; right: 12%; width: 22%; height: 22%; border-radius: 22%; background: var(--ink); }
+.toy i.wf.t { top: 0; } .toy i.wf.b { bottom: 0; }
+.toy b.body { z-index: 1; position: absolute; left: 0; right: 0; top: 11%; bottom: 11%; border-radius: 30% 42% 42% 30% / 45% 50% 50% 45%; background: var(--c);
+  border: calc(var(--w) * .048) solid var(--ink); box-shadow: inset 0 calc(var(--w) * -.08) 0 rgba(0,0,0,.18), inset 0 calc(var(--w) * .05) 0 rgba(255,255,255,.3); }
+.toy b.body::after { content: ''; position: absolute; left: 47%; top: 12%; width: 21%; height: 68%; border-radius: 30%; background: #C7ECFF;
+  border: calc(var(--w) * .035) solid var(--ink); box-sizing: border-box; }
+.toy b.body em { position: absolute; left: 9%; top: 50%; transform: translateY(-50%); width: calc(var(--w) * .22); height: calc(var(--w) * .22);
+  border-radius: 50%; background: #fff; border: calc(var(--w) * .03) solid var(--ink); display: flex; align-items: center; justify-content: center;
+  font-style: normal; font-weight: 800; font-size: calc(var(--w) * .12); line-height: 1; padding-top: calc(var(--w) * .015); color: var(--ink); }
+
+@keyframes pop { from { transform: scale(.85); opacity: 0; } 60% { transform: scale(1.04); opacity: 1; } to { transform: scale(1); } }
+@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@keyframes drift { from { transform: translateX(0); } to { transform: translateX(60px); } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }

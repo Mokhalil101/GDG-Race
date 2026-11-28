@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#1B1340">
+<meta name="robots" content="noindex">
+<title>Among Bugs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=JetBrains+Mono:wght@600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="../among.css">
+</head>
+<body class="among-body">
+<!-- join -->
+<main id="v-join" class="ap join">
+  <div class="ap-brand"><span class="brand"><span class="dots"><i></i><i></i><i></i><i></i></span><span>GDG ASSIUT</span></span></div>
+  <form class="ap-form" id="join-form" autocomplete="off">
+    <div class="beans" aria-hidden="true">
+      <div class="bean" style="--c:#ea4335"><div class="pack"></div><div class="body"><span class="visor"></span></div></div>
+      <div class="bean" style="--c:#4285f4"><div class="pack"></div><div class="body"><span class="visor"></span></div></div>
+      <div class="bean" style="--c:#fbbc04"><div class="pack"></div><div class="body"><span class="visor"></span></div></div>
+      <div class="bean" style="--c:#34a853"><div class="pack"></div><div class="body"><span class="visor"></span></div></div>
+    </div>
+    <h1 class="ol4">AMONG BUGS</h1>
+    <p class="sub">Fix the ship. Find the Bug. Nobody gets hurt.</p>
+    <label>Room <input id="r-code" maxlength="4" autocapitalize="characters" autocorrect="off" spellcheck="false" placeholder="ABCD" inputmode="text"></label>
+    <label>Your name <input id="r-name" maxlength="16" autocomplete="nickname" placeholder="Crewmate name"></label>
+    <p class="ap-msg" id="join-msg" role="status"></p>
+    <button class="btn go" id="join-btn" type="submit">BOARD THE SHIP!</button>
+  </form>
+</main>
+
+<!-- game: everything below is rendered from the server's state for THIS phone only -->
+<main id="v-game" class="ap hidden">
+  <header class="ap-head">
+    <span class="ap-pill" id="g-me"><i id="g-dot"></i><span id="g-name">You</span></span>
+    <span class="right" id="g-right"></span>
+  </header>
+  <section class="ap-body" id="g-body" aria-live="polite">
+    <!-- the role screen markup (YOUR SECRET ROLE) is built by among-play.js -->
+  </section>
+</main>
+<div class="ap-conn hidden" id="p-conn">Reconnecting…</div>
+
+<script src="../socket.io/socket.io.js"></script>
+<script src="../among-play.js"></script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Among Bugs - Big screen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=JetBrains+Mono:wght@600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="../station.css">
+<link rel="stylesheet" href="../among.css">
+</head>
+<body class="among-body">
+<div id="astage">
+  <div id="stars" aria-hidden="true"></div>
+
+  <!-- station missing / closed -->
+  <section id="s-hold" class="scr hidden">
+    <div class="holdon" id="holdon" data-variant="locked">
+      <div class="lock-mascot" aria-hidden="true"><div class="lock-bob"><div class="shackle"></div><div class="shackle-in"></div>
+        <div class="lock-body"><span class="eye l"></span><span class="eye r"></span><span class="glint l"></span><span class="glint r"></span><span class="mouth"></span><span class="cheek l"></span><span class="cheek r"></span></div></div></div>
+      <section class="holdon-copy">
+        <h1 class="holdon-title" id="holdon-title">Hold on!</h1>
+        <p class="holdon-lead" id="holdon-lead">Connecting to the game station…</p>
+        <p class="holdon-body" id="holdon-body"></p>
+        <form id="dev-form" class="holdon-dev hidden" autocomplete="off">
+          <span class="tag">DEVELOPMENT ONLY · NO STATION KEY ON THIS SERVER</span>
+          <input id="dev-secret" type="password" placeholder="Dev host key" aria-label="Dev host key">
+          <button class="btn go" type="submit">Open Among Bugs</button>
+        </form>
+        <p id="hold-err" class="holdon-err" role="alert"></p>
+      </section>
+    </div>
+  </section>
+
+  <!-- lobby -->
+  <section id="s-lobby" class="scr hidden" aria-label="Among Bugs lobby">
+    <header class="a-head"><h1 class="a-title ol4">AMONG BUGS</h1></header>
+    <div class="a-join">
+      <div class="how">Scan to board the ship!</div>
+      <div class="qr"><img id="qr" alt="QR code to join Among Bugs"></div>
+      <div class="code-lbl">ROOM CODE</div>
+      <div class="code" id="l-code">----</div>
+      <div class="url" id="l-url"></div>
+    </div>
+    <div class="a-lobby-right">
+      <div class="a-rules">
+        <div class="a-rule"><b>Crew</b>Walk to rooms on your phone and fix the code there. Fill SHIP FIXED!</div>
+        <div class="a-rule bug"><b id="l-bugrule">1 secret Bug</b>Fakes fixes, swaps lines and sabotages rooms. Nobody gets hurt.</div>
+        <div class="a-rule"><b>Meetings</b>Anyone can call one. Vote on your phone: most votes is thrown off!</div>
+      </div>
+      <div class="a-roster" aria-live="polite">
+        <h2>Crew aboard <span id="l-count">0 / 10</span></h2>
+        <div class="a-beans" id="l-beans"></div>
+      </div>
+      <div class="a-start">
+        <button class="btn go" id="b-start" disabled>LAUNCH THE SHIP!</button>
+        <span class="hint" id="l-hint">Waiting for 5 players…</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ship map -->
+  <section id="s-map" class="scr hidden" aria-label="Among Bugs ship">
+    <div class="a-hull" aria-hidden="true"></div>
+    <div class="a-hall-h" aria-hidden="true"></div>
+    <div class="a-hall-v" aria-hidden="true"></div>
+    <div id="rooms"></div>
+    <div id="crew"></div>
+    <div id="pops"></div>
+    <header class="a-head">
+      <h1 class="a-title ol4">AMONG BUGS</h1>
+      <div class="a-ship" role="meter" aria-label="Ship fixed" aria-valuemin="0" aria-valuemax="100" id="m-shipm"><b>SHIP FIXED</b><span class="bar"><i id="m-ship"></i></span><b class="pct" id="m-pct">0%</b></div>
+      <div class="a-timer" id="m-timer">8:00</div>
+    </header>
+    <div class="a-alarm hidden" id="m-alarm" role="alert"><span class="bang">!</span><span id="m-alarm-t">SABOTAGE!</span></div>
+    <div class="a-foot"><span id="m-count">8 crew · 1 secret Bug</span><span>Anyone can call a meeting from their phone</span></div>
+    <div class="a-shade hidden" id="m-shade"></div>
+    <div class="a-banner hidden" id="m-banner"><div class="big ol5" id="m-banner-big">SHHH!</div><div class="small" id="m-banner-small"></div></div>
+  </section>
+
+  <!-- emergency meeting -->
+  <section id="s-meet" class="scr hidden" aria-label="Emergency meeting">
+    <div class="a-meet">
+      <h1 class="ol5">EMERGENCY MEETING!</h1>
+      <div class="who"><span id="v-by">Called by …</span><b id="v-timer">1:00</b></div>
+      <div class="a-cards" id="v-cards"></div>
+      <div class="foot"><b id="v-count">0 of 0 voted</b><span>Vote on your phone · most votes is thrown off · a tie means nobody goes</span></div>
+    </div>
+    <div class="a-verdict hidden" id="v-verdict"><div class="big ol4" id="v-big">…</div><div class="small" id="v-small"></div></div>
+  </section>
+
+  <!-- finished -->
+  <section id="s-end" class="scr hidden" aria-label="Results">
+    <div class="a-end-title"><h1 class="ol5" id="e-title">CREW WIN!</h1><p id="e-sub"></p></div>
+    <div class="a-reveal" id="e-reveal"></div>
+    <div class="a-end-stats" id="e-stats"></div>
+    <div class="a-end-actions"><button class="btn go" id="b-again">Play again!</button></div>
+  </section>
+
+  <nav class="dock hidden" id="dock" aria-label="Station controls">
+    <button class="btn small go" data-act="start">Start (Space)</button>
+    <button class="btn small warn" data-act="pause"><span id="pause-lbl">Pause</span> (P)</button>
+    <button class="btn small danger" data-act="end">End (E)</button>
+    <button class="btn small go" data-act="again">Play again (Space)</button>
+    <button class="btn small" data-act="mute">Sound: <span id="mute-lbl">on</span></button>
+    <button class="btn small" data-act="fullscreen">Full screen (F)</button>
+  </nav>
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+  <div class="conn-bad hidden" id="conn">Reconnecting…</div>
+</div>
+<script src="../socket.io/socket.io.js"></script>
+<script src="../among-host.js"></script>
+</body>
+</html>
